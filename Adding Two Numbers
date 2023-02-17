@@ -1,0 +1,52 @@
+// Definition for a singly-linked list.
+function ListNode(val, next) {
+  this.val = (val===undefined ? 0 : val)
+  this.next = (next===undefined ? null : next)
+}
+
+// Function to add two numbers represented as linked lists
+const addTwoNumbers = (l1, l2) => {
+  let p1 = l1; // Pointer to traverse the first linked list
+  let p2 = l2; // Pointer to traverse the second linked list
+  let num1 = 0; // Variable to store the value of the current node in the first linked list
+  let num2 = 0; // Variable to store the value of the current node in the second linked list
+  let carry = 0; // Variable to store the carry when adding two numbers
+  let solution = new ListNode(0); // Dummy node to keep track of the head of the solution linked list
+  let current = solution; // Pointer to traverse the solution linked list
+
+  // Traverse both linked lists until both of them have been completely traversed
+  while(p1 || p2) {
+      num1 = (p1) ? p1.val :  0; // If p1 is not null, get the value of the current node, else set it to 0
+      num2 = (p2) ? p2.val :  0; // If p2 is not null, get the value of the current node, else set it to 0
+
+      // Add the two numbers and the carry, and check if the result is less than 10
+      if(num1 + num2 + carry > 9) {
+          
+          current.next = new ListNode(num1 + num2 + carry - 10); // Create a new node with the sum of the two numbers and add it to the solution linked list
+          current = current.next; // Move the pointer to the next node in the solution linked list
+          carry = 1; // Set the carry to 1 
+      }
+      // If the sum of the two numbers and the carry is greater than or equal to 10, set the carry to 1 and subtract 10 from the sum
+      else {
+          
+          current.next = new ListNode(num1 + num2 + carry); // Create a new node with the sum of the two numbers and the carry, subtracted by 10, and add it to the solution linked list
+          current = current.next; // Move the pointer to the next node in the solution linked list
+          carry = 0; // Reset the carry
+      }
+
+      // Move the pointers to the next nodes in the linked lists
+      if(p1) p1 = p1.next;
+      if(p2) p2 = p2.next;
+  }
+
+  // If there is still a carry left, add it as a new node to the end of the solution linked list
+  if(carry) current.next = new ListNode(carry);
+
+  // Return the head of the solution linked list (i.e., the next node after the dummy node)
+  return solution.next;
+};
+
+// Test case
+const l1 = new ListNode(2, new ListNode(4, new ListNode(3))); // First linked list representing the number 342
+const l2 = new ListNode(5, new ListNode(6, new ListNode(4))); // Second linked list representing the number 465
+console.log(addTwoNumbers(l1, l2)); // should output { val: 7, next: { val: 0, next: { val: 8, next: null } } }, which represents the number 807
